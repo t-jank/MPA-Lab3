@@ -10,10 +10,8 @@ import math
 
 
 n = 100
-
-Points=[]
-
 plane = 'c' # square or circle
+Points=[]
 
 if plane=='s' or plane=='square':
     for i in range(0,n):
