@@ -14,7 +14,10 @@ def length(A,B):
 
 def angle(A,B,C):
     if B==C: return -1
-    return math.acos( (length(A,B)**2 + length(B,C)**2 - length(A,C)**2) / (2*length(A,B)*length(B,C)) )
+    AB=length(A,B)
+    BC=length(B,C)
+    AC=length(A,C)
+    return math.acos( (AB**2 + BC**2 - AC**2) / (2*AB*BC) )
 
 
 def update_angles(hull,points,angles):
@@ -24,7 +27,6 @@ def update_angles(hull,points,angles):
 
 
 def Jarvis_march(points):
-    
     hull=[]
     hull.append([0,0])
     hull.append([0,9999])
@@ -37,7 +39,6 @@ def Jarvis_march(points):
     for i in range(0,len(points)):
         angles.append([0])
     update_angles(hull,points,angles)
-        
     N=([-1,-1])
     while(True):
         N=points[0]
@@ -50,13 +51,7 @@ def Jarvis_march(points):
             break
         hull.append(N)
         update_angles(hull,points,angles)
-    
-    
-    hull.append(points[3])
-    hull.append(points[5])
-    hull.append(points[8])
-    
-    
+
     hull_x=[]
     hull_y=[]
     for i in range(1,len(hull)):
@@ -93,7 +88,6 @@ for i in range(0,len(Points)):
 plt.axis('square')
 plt.xlim([0,n])
 plt.ylim(0,n)
-#Jarvis_march(Points)
 hullxy=Jarvis_march(Points)
 plt.plot(hullxy[0],hullxy[1])
 plt.show()
