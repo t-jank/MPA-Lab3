@@ -107,6 +107,8 @@ def sortbyx(points): # points mergesort by x
     return c
     
 
+def Graham_scan(points):
+    return 0
 
 '''
 from functools import reduce
