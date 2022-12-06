@@ -11,14 +11,12 @@ import math
 def length(A,B):
     return math.sqrt( (A[0]-B[0])**2 + (A[1]-B[1])**2 )
 
-
 def angle(A,B,C):
     if B==C: return -1
     AB=length(A,B)
     BC=length(B,C)
     AC=length(A,C)
     return math.acos( (AB**2 + BC**2 - AC**2) / (2*AB*BC) )
-
 
 def update_angles(hull,points,angles):
     hull_size=len(hull)
@@ -62,6 +60,82 @@ def Jarvis_march(points):
     return hull_x, hull_y
 
 
+def prosta(P1,P2):
+    a = (P1[1] - P2[1]) / (P1[0] - P2[0])
+    b = P1[1] - a*P1[0]
+    return a,b
+
+def ifright(P1,P2,P3):
+    p=prosta(P1,P2)
+    a=p[0]
+    b=p[1]
+    ynaprostej = a*P3[0] + b
+    if P3[1] < ynaprostej:
+        return True
+    else:
+        return False
+    
+def sortbyx(points): # points mergesort by x
+    if len(points)==1:return points
+    s=int(len(points)/2)
+    a=sortbyx(points[:s])
+    b=sortbyx(points[s:])
+    a=a[::-1]
+    b=b[::-1]
+    i=a.pop()
+    e=b.pop()
+    c=[]
+    for x in range(len(points)):
+        if(i[0]<e[0]):
+            c.append(i)
+            if not len(a)==0:
+                i=a.pop()
+            else:
+                c.append(e)
+                for q in b:
+                    c.append(q)
+                break    
+        else:
+            c.append(e)
+            if not len(b)==0:
+                e=b.pop()
+            else:
+                c.append(i)
+                for q in a:
+                    c.append(q)
+                break
+    return c
+    
+
+
+'''
+from functools import reduce
+def convex_hull_graham(points):
+    ''
+    Returns points on convex hull in CCW order according to Graham's scan algorithm. 
+    By Tom Switzer <thomas.switzer@gmail.com>.
+    ''
+    TURN_LEFT, TURN_RIGHT, TURN_NONE = (1, -1, 0)
+
+    def cmp(a, b):
+        return (a > b) - (a < b)
+
+    def turn(p, q, r):
+        return cmp((q[0] - p[0])*(r[1] - p[1]) - (r[0] - p[0])*(q[1] - p[1]), 0)
+
+    def _keep_left(hull, r):
+        while len(hull) > 1 and turn(hull[-2], hull[-1], r) != TURN_LEFT:
+            hull.pop()
+        if not len(hull) or hull[-1] != r:
+            hull.append(r)
+        return hull
+
+    points = sorted(points)
+    l = reduce(_keep_left, points, [])
+    u = reduce(_keep_left, reversed(points), [])
+    return l.extend(u[i] for i in range(1, len(u) - 1)) or l
+'''
+
 
 n = 10
 plane = 'c' # square or circle
@@ -88,6 +162,30 @@ for i in range(0,len(Points)):
 plt.axis('square')
 plt.xlim([0,n])
 plt.ylim(0,n)
+
+#######  Jarvis  ########
 hullxy=Jarvis_march(Points)
 plt.plot(hullxy[0],hullxy[1])
 plt.show()
+
+#######  Graham  ########
+Lgorna=[]
+points = sortbyx(Points)
+Lgorna.append(points[0])
+Lgorna.append(points[1])
+
+
+
+
+'''
+hullxg=[]
+hullyg=[]
+grahamhull=convex_hull_graham(Points)
+for i in range(0,len(grahamhull)):
+    hullxg.append(grahamhull[i][0])
+    hullyg.append(grahamhull[i][1])
+hullxg.append(hullxg[0])
+hullyg.append(hullyg[0])
+plt.plot(hullxg,hullyg)
+plt.show()
+'''
