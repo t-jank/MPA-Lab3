@@ -49,15 +49,9 @@ def Jarvis_march(points):
             break
         hull.append(N)
         update_angles(hull,points,angles)
-
-    hull_x=[]
-    hull_y=[]
-    for i in range(1,len(hull)):
-        hull_x.append(hull[i][0])
-        hull_y.append(hull[i][1])
-    hull_x.append(hull_x[0])
-    hull_y.append(hull_y[0])
-    return hull_x, hull_y
+    
+    hull.remove(hull[0])
+    return hull
 
 
 def prosta(P1,P2):
@@ -108,7 +102,35 @@ def sortbyx(points): # points mergesort by x
     
 
 def Graham_scan(points):
-    return 0
+    n=len(points)
+    Lupper=[]
+    points = sortbyx(points)
+    
+    Lupper.append(points[0])
+    Lupper.append(points[1])
+    for i in range(2,n):
+        Lupper.append(points[i])
+        lenlupper=len(Lupper)
+        while(lenlupper>2 and ifright(Lupper[lenlupper-3],Lupper[lenlupper-2],Lupper[lenlupper-1])==False):
+            Lupper.remove(Lupper[lenlupper-2])
+            lenlupper=len(Lupper)
+            
+    Llower=[]
+    Llower.append(points[n-1])
+    Llower.append(points[n-2])
+    
+    for i in range(n-3,0,-1):
+        Llower.append(points[i])
+        lenllower=len(Llower)
+        while(lenllower>2 and ifright(Llower[lenllower-3],Llower[lenllower-2],Llower[lenllower-1])==False):
+            Llower.remove(Llower[lenllower-2])
+            lenllower=len(Llower)
+    '''
+    Llower.remove(Llower[0])
+    Llower.remove(Llower[len(Llower)-1])
+    hull = Llower + Lupper
+    '''
+    return Llower
 
 '''
 from functools import reduce
@@ -139,6 +161,18 @@ def convex_hull_graham(points):
 '''
 
 
+def draw_hull(hull):
+    hull_x=[]
+    hull_y=[]
+    for i in range(0,len(hull)):
+        hull_x.append(hull[i][0])
+        hull_y.append(hull[i][1])
+    hull_x.append(hull_x[0])
+    hull_y.append(hull_y[0])
+    plt.plot(hull_x,hull_y)
+    plt.show()
+
+
 n = 10
 plane = 'c' # square or circle
 Points=[]
@@ -166,18 +200,14 @@ plt.xlim([0,n])
 plt.ylim(0,n)
 
 #######  Jarvis  ########
-hullxy=Jarvis_march(Points)
-plt.plot(hullxy[0],hullxy[1])
-plt.show()
+#hull=Jarvis_march(Points)
+
 
 #######  Graham  ########
-Lgorna=[]
-points = sortbyx(Points)
-Lgorna.append(points[0])
-Lgorna.append(points[1])
+hull=Graham_scan(Points)
 
 
-
+draw_hull(hull)
 
 '''
 hullxg=[]
