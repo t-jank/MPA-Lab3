@@ -129,14 +129,32 @@ def draw_hull(hull):
     hull_x.append(hull_x[0])
     hull_y.append(hull_y[0])
     plt.plot(hull_x,hull_y)
-    plt.show()
+  #  plt.show()
 
 
-n = 50
+def Chan_algorithm(points):
+    n=len(points)
+    m = H = int(n/3)
+    Psubsets=[]
+    j=0
+    for i in range(0,math.ceil(n/m)):
+        Psubsets.append([0])
+    for i in range(0,len(Psubsets)):
+        while j!=n and len(Psubsets[i])<=m:
+            Psubsets[i].append(points[j])
+            j+=1
+        Psubsets[i].remove(Psubsets[i][0])
+    for i in range(0,len(Psubsets)):
+        draw_hull(Graham_scan(Psubsets[i]))
+    return Psubsets
+
+
+
+n = 15
 plane = 'c' # square or circle
-algorithm = 'j' # jarvis, graham_my or graham_fast
+algorithm = 'jfr' # jarvis, graham_my or graham_fast
 time_measurement = False
-draw = False
+draw = True
 
 Points=[]
 if plane=='s' or plane=='square':
@@ -164,13 +182,19 @@ if draw==True:
 start=time.time()
 if algorithm=='jarvis' or algorithm=='j' or algorithm=='Jarvis':
     hull=Jarvis_march(Points)
-elif algorithm=='graham_my' or algorithm=='g1' or algorithm=='gm' or algorithm=='Graham_my':
+elif algorithm=='graham_my' or algorithm=='g1' or algorithm=='g' or algorithm=='gm' or algorithm=='Graham_my':
     hull=Graham_scan(Points)
 elif algorithm=='graham_fast' or algorithm=='g2' or algorithm=='gf' or algorithm=='Graham_fast':
     hull=convex_hull_graham(Points)
 end=time.time()
 
+
+Chan_algorithm(Points)
+
+
+'''
 if time_measurement==True:
     print(end-start)
 if draw==True:
     draw_hull(hull)
+'''
