@@ -192,10 +192,8 @@ elif algorithm=='graham_fast' or algorithm=='g2' or algorithm=='gf' or algorithm
     hull=convex_hull_graham(Points)
 elif algorithm=='c' or algorithm=='ch' or algorithm=='Chan' or algorithm=='chan':
     hull=Chan_algorithm(Points)
+else: sys.exit("Algorithm undefined")
 end=time.time()
-
-
-
 
 
 
