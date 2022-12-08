@@ -135,9 +135,8 @@ def draw_hull(hull):
   #  plt.show()
 
 
-def Chan_algorithm(points):
+def Chan_algorithm(points,m,H):
     n=len(points)
-    m = H = int(n/3)
     Psubsets=[]
     j=0
     for i in range(0,math.ceil(n/m)):
@@ -147,16 +146,25 @@ def Chan_algorithm(points):
             Psubsets[i].append(points[j])
             j+=1
         Psubsets[i].remove(Psubsets[i][0])
-   # '''  
+    hulls=[]
+    for i in range(0,len(Psubsets)):
+        hulls.append(Graham_scan(Psubsets[i]))
+    '''
     hulls=Graham_scan(Psubsets[0])
     for i in range(1,len(Psubsets)):
         hulls+=Graham_scan(Psubsets[i])
     #    draw_hull(Graham_scan(Psubsets[i]))
     hull=Graham_scan(hulls)
-  #  '''
- #   hull=[]
- #   hull[0]=([0,-9999]) # point zero [0,-inf]
-    
+    '''
+    hull=[]
+    hull.append([0,-9999]) # point zero - [0,-inf]
+    hull.append([0,0])
+    for i in range(0,n): # point 1 - the rightmost point of Points
+        if points[i][0]>hull[1][0]:
+            hull[1]=points[i]
+    for k in range(0,H):
+        for i in range(0,math.ceil(n/m)):
+            q=8
     
     return hull
 
@@ -202,7 +210,8 @@ elif algorithm=='graham_my' or algorithm=='g1' or algorithm=='g' or algorithm=='
 elif algorithm=='graham_fast' or algorithm=='g2' or algorithm=='gf' or algorithm=='Graham_fast':
     hull=convex_hull_graham(Points)
 elif algorithm=='c' or algorithm=='ch' or algorithm=='Chan' or algorithm=='chan':
-    hull=Chan_algorithm(Points)
+    m = H = int(n/3)
+    hull=Chan_algorithm(Points,m,H)
 else: sys.exit("Algorithm undefined")
 end=time.time()
 
