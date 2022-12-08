@@ -27,23 +27,25 @@ def update_angles(hull,points,angles):
 
 
 def Jarvis_march(points):
+    n=len(points)
+    if n<4: return points
     hull=[]
     hull.append([0,0])
     hull.append([0,9999])
-    for i in range(0,len(points)): # finding first point of hull, the smallest y
+    for i in range(0,n): # finding first point of hull, the smallest y
         if points[i][1]<hull[1][1]:
             hull[1] = points[i]
     hull[0]=([-9999,hull[1][1]]) # point zero [-inf, y(P1)]
     
     angles=[]
-    for i in range(0,len(points)):
+    for i in range(0,n):
         angles.append([0])
     update_angles(hull,points,angles)
     N=([-1,-1])
     while(True):
         N=points[0]
         angle=-1
-        for i in range(0,len(points)):
+        for i in range(0,n):
             if angles[i]>angle:
                 angle=angles[i]
                 N=points[i]    
@@ -74,6 +76,7 @@ def ifright(P1,P2,P3):
 
 def Graham_scan(points):
     n=len(points)
+    if n<4: return points
     Lupper=[]
     points.sort()
     Lupper.append(points[0])
@@ -144,21 +147,29 @@ def Chan_algorithm(points):
             Psubsets[i].append(points[j])
             j+=1
         Psubsets[i].remove(Psubsets[i][0])
-        
+   # '''  
     hulls=Graham_scan(Psubsets[0])
     for i in range(1,len(Psubsets)):
         hulls+=Graham_scan(Psubsets[i])
-        #draw_hull(Graham_scan(Psubsets[i]))
-    hull=Jarvis_march(hulls)
+    #    draw_hull(Graham_scan(Psubsets[i]))
+    hull=Graham_scan(hulls)
+  #  '''
+ #   hull=[]
+ #   hull[0]=([0,-9999]) # point zero [0,-inf]
+    
+    
     return hull
 
+def Chan_guess(points):
+    return 0
 
 
-n = 600
+
+n = 60
 plane = 'c' # square or circle
 algorithm = 'c' # jarvis, graham_my, graham_fast, chan
 time_measurement = True
-draw = False
+draw = True
 
 Points=[]
 if plane=='s' or plane=='square':
