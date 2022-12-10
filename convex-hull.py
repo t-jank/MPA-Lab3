@@ -14,7 +14,7 @@ def length(A,B):
     return math.sqrt( (A[0]-B[0])**2 + (A[1]-B[1])**2 )
 
 def angle(A,B,C):
-    if B==C: return -1
+    if B==C or A==C or A==B: return -1
     AB=length(A,B)
     BC=length(B,C)
     AC=length(A,C)
@@ -137,6 +137,7 @@ def draw_hull(hull):
 
 def Chan_algorithm(points,m,H):
     n=len(points)
+    ## step 1 ##
     Psubsets=[]
     j=0
     for i in range(0,math.ceil(n/m)):
@@ -146,38 +147,64 @@ def Chan_algorithm(points,m,H):
             Psubsets[i].append(points[j])
             j+=1
         Psubsets[i].remove(Psubsets[i][0])
+    ## step 2 i 3 ##
     hulls=[]
     for i in range(0,len(Psubsets)):
         hulls.append(Graham_scan(Psubsets[i]))
-    '''
-    hulls=Graham_scan(Psubsets[0])
-    for i in range(1,len(Psubsets)):
-        hulls+=Graham_scan(Psubsets[i])
-    #    draw_hull(Graham_scan(Psubsets[i]))
-    hull=Graham_scan(hulls)
-    '''
+  #      draw_hull(Graham_scan(Psubsets[i]))
+    ## step 4 ##
     hull=[]
     hull.append([0,-9999]) # point zero - [0,-inf]
+    ## step 5 ##
     hull.append([0,0])
     for i in range(0,n): # point 1 - the rightmost point of Points
         if points[i][0]>hull[1][0]:
             hull[1]=points[i]
+    
+    ## CZY OTOCZKI W CCW ?
+    
+    ## steps 6-8 ##
+    q=[]
+    qangle=[]
     for k in range(0,H):
         for i in range(0,math.ceil(n/m)):
-            q=8
-    
-    return hull
+            q.append([0,0])
+            qangle.append(0)
+            for j in range(0,len(hulls[i])): # tu zrobic przeszukiwanie binarne a nie tak !!
+                if angle(hull[len(hull)-2],hull[len(hull)-1],hulls[i][j])>qangle[i]:
+                    qangle[i]=angle(hull[len(hull)-2],hull[len(hull)-1],hulls[i][j])
+                    q[i]=hulls[i][j]
+    ## step 9 ##
+        ind=qangle.index(max(qangle))
+    ## step 10 ##
+        if q[ind]==hull[1]:
+            hull.remove(hull[0])
+            return hull
+    ## step 9 ##
+        hull.append(q[ind])
+        q.clear()
+        qangle.clear()
+    ## step 11 ##
+    return 'incomplete'
 
-def Chan_guess(points):
-    return 0
+def Chan_good(points):
+    t=0
+    n=len(points)
+    while True:
+        t+=1
+        m=H=min(2**2**t,n)
+        L=Chan_algorithm(points, m, H)
+        if L!='incomplete':
+            return L
 
 
 
-n = 60
+n = 6000
 plane = 'c' # square or circle
 algorithm = 'c' # jarvis, graham_my, graham_fast, chan
 time_measurement = True
-draw = True
+draw = False
+
 
 Points=[]
 if plane=='s' or plane=='square':
@@ -210,12 +237,9 @@ elif algorithm=='graham_my' or algorithm=='g1' or algorithm=='g' or algorithm=='
 elif algorithm=='graham_fast' or algorithm=='g2' or algorithm=='gf' or algorithm=='Graham_fast':
     hull=convex_hull_graham(Points)
 elif algorithm=='c' or algorithm=='ch' or algorithm=='Chan' or algorithm=='chan':
-    m = H = int(n/3)
-    hull=Chan_algorithm(Points,m,H)
+    hull=Chan_good(Points)
 else: sys.exit("Algorithm undefined")
 end=time.time()
-
-
 
 if time_measurement==True:
     print(end-start)
