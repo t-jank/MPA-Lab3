@@ -151,8 +151,8 @@ def Chan_algorithm(points,m,H):
     hulls=[]
     for i in range(0,len(Psubsets)):
         hulls.append(Graham_scan(Psubsets[i]))
-        hulls[i].reverse()
-        draw_hull(Graham_scan(Psubsets[i]))
+        hulls[i].reverse() # in order to have ccw order
+     #  draw_hull(Graham_scan(Psubsets[i]))
     ## step 4 ##
     hull=[]
     hull.append([0,-9999]) # point zero - [0,-inf]
