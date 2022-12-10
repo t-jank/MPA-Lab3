@@ -151,7 +151,8 @@ def Chan_algorithm(points,m,H):
     hulls=[]
     for i in range(0,len(Psubsets)):
         hulls.append(Graham_scan(Psubsets[i]))
-  #      draw_hull(Graham_scan(Psubsets[i]))
+        hulls[i].reverse()
+        draw_hull(Graham_scan(Psubsets[i]))
     ## step 4 ##
     hull=[]
     hull.append([0,-9999]) # point zero - [0,-inf]
@@ -160,9 +161,6 @@ def Chan_algorithm(points,m,H):
     for i in range(0,n): # point 1 - the rightmost point of Points
         if points[i][0]>hull[1][0]:
             hull[1]=points[i]
-    
-    ## CZY OTOCZKI W CCW ?
-    
     ## steps 6-8 ##
     q=[]
     qangle=[]
@@ -199,11 +197,11 @@ def Chan_good(points):
 
 
 
-n = 6000
+n = 10
 plane = 'c' # square or circle
 algorithm = 'c' # jarvis, graham_my, graham_fast, chan
 time_measurement = True
-draw = False
+draw = True
 
 
 Points=[]
@@ -245,3 +243,4 @@ if time_measurement==True:
     print(end-start)
 if draw==True:
     draw_hull(hull)
+
