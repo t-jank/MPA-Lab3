@@ -133,14 +133,7 @@ def draw_hull(hull):
     hull_y.append(hull_y[0])
     plt.plot(hull_x,hull_y)
   #  plt.show()
-'''
-def looped_array(arr,idx):
-    n=len(arr)
-    if idx<n:
-        return arr[idx]
-    else:
-        return arr[idx-n]
-    '''
+
 
 def max_angle(points,p1,p2):
     '''
@@ -152,7 +145,7 @@ def max_angle(points,p1,p2):
         if idx==n-1: idxnext=0
         else: idxnext=idx+1
         angleq=angle(p1,p2,points[idx])
-        angleqnext=angle(p1,p2,points[idxnext])#looped_array(points, idx+1))
+        angleqnext=angle(p1,p2,points[idxnext])
         if angleqnext>angleq: return 'next'
         angleqprev=angle(p1,p2,points[idx-1])
         if angleqprev>angleq: return 'prev'
@@ -206,12 +199,6 @@ def Chan_algorithm(points,m,H):
             qangle.append(0)
             q[i] = max_angle(hulls[i], hull[len(hull)-2], hull[len(hull)-1])
             qangle[i]=angle(hull[len(hull)-2], hull[len(hull)-1], q[i])
-            '''
-            for j in range(0,len(hulls[i])): # tu zrobic przeszukiwanie binarne a nie tak !!
-                if angle(hull[len(hull)-2],hull[len(hull)-1],hulls[i][j])>qangle[i]:
-                    qangle[i]=angle(hull[len(hull)-2],hull[len(hull)-1],hulls[i][j])
-                    q[i]=hulls[i][j]
-                    '''
     ## step 9 ##
         ind=qangle.index(max(qangle))
     ## step 10 ##
@@ -268,14 +255,14 @@ if draw==True:
     plt.ylim(0,n)
     
 start=time.time()
-if algorithm=='jarvis' or algorithm=='j' or algorithm=='Jarvis':
+if algorithm=='jarvis' or algorithm=='j':
     hull=Jarvis_march(Points)
-elif algorithm=='graham_my' or algorithm=='g1' or algorithm=='g' or algorithm=='gm' or algorithm=='Graham_my':
+elif algorithm=='graham_my' or algorithm=='g1' or algorithm=='g' or algorithm=='gm':
     hull=Graham_scan(Points)
-elif algorithm=='graham_fast' or algorithm=='g2' or algorithm=='gf' or algorithm=='Graham_fast':
+elif algorithm=='graham_fast' or algorithm=='g2' or algorithm=='gf':
     hull=convex_hull_graham(Points)
-elif algorithm=='c' or algorithm=='ch' or algorithm=='Chan' or algorithm=='chan':
-    hull=Chan_good(Points)
+elif algorithm=='c' or algorithm=='chan':
+    hull=Chan_good(Points)   
 else: sys.exit("Algorithm undefined")
 end=time.time()
 
