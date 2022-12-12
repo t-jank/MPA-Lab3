@@ -133,14 +133,14 @@ def draw_hull(hull):
     hull_y.append(hull_y[0])
     plt.plot(hull_x,hull_y)
   #  plt.show()
-  
+'''
 def looped_array(arr,idx):
     n=len(arr)
     if idx<n:
         return arr[idx]
     else:
         return arr[idx-n]
-    
+    '''
 
 def max_angle(points,p1,p2):
     '''
@@ -149,24 +149,25 @@ def max_angle(points,p1,p2):
     '''
     n=len(points)
     def susq(idx):
+        if idx==n-1: idxnext=0
+        else: idxnext=idx+1
         angleq=angle(p1,p2,points[idx])
-        angleqnext=angle(p1,p2,looped_array(points, idx+1))
+        angleqnext=angle(p1,p2,points[idxnext])#looped_array(points, idx+1))
         angleqprev=angle(p1,p2,points[idx-1])
         if angleq>angleqnext and angleq>angleqprev: return 'found'
         elif angleqnext>angleq and angleqnext>angleqprev: return 'next'
         else: return 'prev'
     t=1
-    idx=round(n/2**t)
+    idx=math.ceil(n/2**t)
     while True:
         t+=1
         sq=susq(idx)
         if sq=='found': return points[idx]
         elif sq=='next':
-            idx=idx+round(n/2**t)
+            idx=idx+math.ceil(n/2**t)
             if idx>=n:
                 idx=idx-n
-        elif sq=='prev': idx=idx-round(n/2**t)
-        print(t) # tu sie pierdoli
+        elif sq=='prev': idx=idx-math.ceil(n/2**t)
 
 
 
@@ -187,7 +188,7 @@ def Chan_algorithm(points,m,H):
     for i in range(0,len(Psubsets)):
         hulls.append(Graham_scan(Psubsets[i]))
         hulls[i].reverse() # in order to have ccw order
-     #  draw_hull(Graham_scan(Psubsets[i]))
+     #   draw_hull(Graham_scan(Psubsets[i]))
     ## step 4 ##
     hull=[]
     hull.append([0,-9999]) # point zero - [0,-inf]
@@ -236,11 +237,11 @@ def Chan_good(points):
 
 
 
-n = 10
-plane = 'c' # square or circle
+n = 50
+plane = 's' # square or circle
 algorithm = 'c' # jarvis, graham_my, graham_fast, chan
 time_measurement = True
-draw = True
+draw = False
 
 
 Points=[]
