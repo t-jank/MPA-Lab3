@@ -153,10 +153,10 @@ def max_angle(points,p1,p2):
         else: idxnext=idx+1
         angleq=angle(p1,p2,points[idx])
         angleqnext=angle(p1,p2,points[idxnext])#looped_array(points, idx+1))
+        if angleqnext>angleq: return 'next'
         angleqprev=angle(p1,p2,points[idx-1])
-        if angleq>angleqnext and angleq>angleqprev: return 'found'
-        elif angleqnext>angleq and angleqnext>angleqprev: return 'next'
-        else: return 'prev'
+        if angleqprev>angleq: return 'prev'
+        else: return 'found'
     t=1
     idx=math.ceil(n/2**t)
     while True:
@@ -237,11 +237,11 @@ def Chan_good(points):
 
 
 
-n = 50
-plane = 's' # square or circle
+n = 100
+plane = 'c' # square or circle
 algorithm = 'c' # jarvis, graham_my, graham_fast, chan
 time_measurement = True
-draw = False
+draw = True
 
 
 Points=[]
