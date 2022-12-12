@@ -133,6 +133,41 @@ def draw_hull(hull):
     hull_y.append(hull_y[0])
     plt.plot(hull_x,hull_y)
   #  plt.show()
+  
+def looped_array(arr,idx):
+    n=len(arr)
+    if idx<n:
+        return arr[idx]
+    else:
+        return arr[idx-n]
+    
+
+def max_angle(points,p1,p2):
+    '''
+    returns the point q from points that maximizes angle )<p1p2q
+    by using binary search
+    '''
+    n=len(points)
+    def susq(idx):
+        angleq=angle(p1,p2,points[idx])
+        angleqnext=angle(p1,p2,looped_array(points, idx+1))
+        angleqprev=angle(p1,p2,points[idx-1])
+        if angleq>angleqnext and angleq>angleqprev: return 'found'
+        elif angleqnext>angleq and angleqnext>angleqprev: return 'next'
+        else: return 'prev'
+    t=1
+    idx=round(n/2**t)
+    while True:
+        t+=1
+        sq=susq(idx)
+        if sq=='found': return points[idx]
+        elif sq=='next':
+            idx=idx+round(n/2**t)
+            if idx>=n:
+                idx=idx-n
+        elif sq=='prev': idx=idx-round(n/2**t)
+        print(t) # tu sie pierdoli
+
 
 
 def Chan_algorithm(points,m,H):
@@ -168,10 +203,14 @@ def Chan_algorithm(points,m,H):
         for i in range(0,math.ceil(n/m)):
             q.append([0,0])
             qangle.append(0)
+            q[i] = max_angle(hulls[i], hull[len(hull)-2], hull[len(hull)-1])
+            qangle[i]=angle(hull[len(hull)-2], hull[len(hull)-1], q[i])
+            '''
             for j in range(0,len(hulls[i])): # tu zrobic przeszukiwanie binarne a nie tak !!
                 if angle(hull[len(hull)-2],hull[len(hull)-1],hulls[i][j])>qangle[i]:
                     qangle[i]=angle(hull[len(hull)-2],hull[len(hull)-1],hulls[i][j])
                     q[i]=hulls[i][j]
+                    '''
     ## step 9 ##
         ind=qangle.index(max(qangle))
     ## step 10 ##
