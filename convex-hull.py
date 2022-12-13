@@ -224,50 +224,65 @@ def Chan_good(points):
 
 
 
-n = 100
+n = 15 ###!!!!!!!!!!!!!!!! n=13 doesn't work, to fix !!!! #######
 plane = 'c' # square or circle
 algorithm = 'c' # jarvis, graham_my, graham_fast, chan
 time_measurement = True
-draw = True
+draw = False
 
-
-Points=[]
-if plane=='s' or plane=='square':
-    for i in range(0,n):
-        x = random.random()*n
-        y = random.random()*n
-        Points.append([x,y])
-elif plane=='c' or plane=='circle':
-    while(len(Points) < n):
-        x = random.random()*n
-        y = random.random()*n
-        ray = n/2
-        distance_from_centre = math.sqrt( (n/2-x)**2 + (n/2-y)**2 )
-        if distance_from_centre <= ray:
+for n in range(10,1000,50):
+    Points=[]
+    if plane=='s' or plane=='square':
+        for i in range(0,n):
+            x = random.random()*n
+            y = random.random()*n
             Points.append([x,y])
-else: sys.exit("Plane undefined")
-
-if draw==True:
-    for i in range(0,len(Points)):
-        plt.scatter(Points[i][0],Points[i][1],color='k')
-    plt.axis('square')
-    plt.xlim([0,n])
-    plt.ylim(0,n)
+    elif plane=='c' or plane=='circle':
+        while(len(Points) < n):
+            x = random.random()*n
+            y = random.random()*n
+            ray = n/2
+            distance_from_centre = math.sqrt( (n/2-x)**2 + (n/2-y)**2 )
+            if distance_from_centre <= ray:
+                Points.append([x,y])
+    else: sys.exit("Plane undefined")
+    '''
+    if draw==True:
+        for i in range(0,len(Points)):
+            plt.scatter(Points[i][0],Points[i][1],color='k')
+        plt.axis('square')
+        plt.xlim([0,n])
+        plt.ylim(0,n)
+      '''  
+    start=time.time()
+    if algorithm=='jarvis' or algorithm=='j':
+        hull=Jarvis_march(Points)
+    elif algorithm=='graham_my' or algorithm=='g1' or algorithm=='g' or algorithm=='gm':
+        hull=Graham_scan(Points)
+    elif algorithm=='graham_fast' or algorithm=='g2' or algorithm=='gf':
+        hull=convex_hull_graham(Points)
+    elif algorithm=='c' or algorithm=='chan':
+        hull=Chan_good(Points)   
+    else: sys.exit("Algorithm undefined")
+    end=time.time()
+    '''
+    if time_measurement==True:
+        print(end-start)
+    if draw==True:
+        draw_hull(hull)
+    '''
+    if n==10: plt.scatter(n,end-start,color='crimson',label='time measured')
+    else: plt.scatter(n,end-start,color='crimson')
+    if n==10: plt.scatter(n,n/40000,color='limegreen',label='O(n)')
+    else: plt.scatter(n,n/40000,color='limegreen')
+    if n==10: plt.scatter(n,n*math.log(n)/100000,color='blue',label='O(nlogn)')
+    else: plt.scatter(n,n*math.log(n)/100000,color='blue')
+    if n==10: plt.scatter(n,n*len(hull)/800000,color='orange',label='O(nh)')
+    else: plt.scatter(n,n*len(hull)/800000,color='orange')
+    if n==10: plt.scatter(n,n*math.log(len(hull))/80000,color='hotpink',label='O(nlogh)')
+    else: plt.scatter(n,n*math.log(len(hull))/80000,color='hotpink')
+    if n==10: plt.scatter(n,n*(math.log(len(hull))**2)/300000,color='grey',label='O(nlog^2(h))')
+    else: plt.scatter(n,n*(math.log(len(hull))**2)/300000,color='grey')
     
-start=time.time()
-if algorithm=='jarvis' or algorithm=='j':
-    hull=Jarvis_march(Points)
-elif algorithm=='graham_my' or algorithm=='g1' or algorithm=='g' or algorithm=='gm':
-    hull=Graham_scan(Points)
-elif algorithm=='graham_fast' or algorithm=='g2' or algorithm=='gf':
-    hull=convex_hull_graham(Points)
-elif algorithm=='c' or algorithm=='chan':
-    hull=Chan_good(Points)   
-else: sys.exit("Algorithm undefined")
-end=time.time()
-
-if time_measurement==True:
-    print(end-start)
-if draw==True:
-    draw_hull(hull)
-
+plt.legend()
+    
