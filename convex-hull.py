@@ -271,18 +271,20 @@ for n in range(10,1000,50):
     if draw==True:
         draw_hull(hull)
     '''
-    if n==10: plt.scatter(n,end-start,color='crimson',label='time measured')
-    else: plt.scatter(n,end-start,color='crimson')
-    if n==10: plt.scatter(n,n/40000,color='limegreen',label='O(n)')
-    else: plt.scatter(n,n/40000,color='limegreen')
-    if n==10: plt.scatter(n,n*math.log(n)/100000,color='blue',label='O(nlogn)')
-    else: plt.scatter(n,n*math.log(n)/100000,color='blue')
-    if n==10: plt.scatter(n,n*len(hull)/800000,color='orange',label='O(nh)')
-    else: plt.scatter(n,n*len(hull)/800000,color='orange')
-    if n==10: plt.scatter(n,n*math.log(len(hull))/80000,color='hotpink',label='O(nlogh)')
-    else: plt.scatter(n,n*math.log(len(hull))/80000,color='hotpink')
-    if n==10: plt.scatter(n,n*(math.log(len(hull))**2)/300000,color='grey',label='O(nlog^2(h))')
-    else: plt.scatter(n,n*(math.log(len(hull))**2)/300000,color='grey')
+    if n==10:
+        plt.scatter(n,end-start,color='crimson',label='time measured')
+        plt.scatter(n,n/20000,color='limegreen',label='O(n)')
+        plt.scatter(n,n*math.log(n)/100000,color='blue',label='O(nlogn)')
+        plt.scatter(n,n*len(hull)/800000,color='orange',label='O(nh)')
+        plt.scatter(n,n*math.log(len(hull))/50000,color='hotpink',label='O(nlogh)')
+        plt.scatter(n,n*(math.log(len(hull))**2)/100000,color='grey',label='O(nlog^2(h))')
+    else:
+        plt.scatter(n,end-start,color='crimson')
+        plt.scatter(n,n/20000,color='limegreen')
+        plt.scatter(n,n*math.log(n)/100000,color='blue')
+        plt.scatter(n,n*len(hull)/800000,color='orange')
+        plt.scatter(n,n*math.log(len(hull))/50000,color='hotpink')
+        plt.scatter(n,n*(math.log(len(hull))**2)/100000,color='grey')
     
 plt.legend()
     
