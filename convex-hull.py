@@ -230,7 +230,7 @@ algorithm = 'c' # jarvis, graham_my, graham_fast, chan
 time_measurement = True
 draw = False
 
-for n in range(10,1000,50):
+for n in range(10,10000,50):
     Points=[]
     if plane=='s' or plane=='square':
         for i in range(0,n):
@@ -272,19 +272,19 @@ for n in range(10,1000,50):
         draw_hull(hull)
     '''
     if n==10:
-        plt.scatter(n,end-start,color='crimson',label='time measured')
-        plt.scatter(n,n/5000,color='limegreen',label='O(n)')
-        plt.scatter(n,n*math.log(n)/10000,color='blue',label='O(nlogn)')
-        plt.scatter(n,n*len(hull)/25000,color='orange',label='O(nh)')
-        plt.scatter(n,n*math.log(len(hull))/10000,color='hotpink',label='O(nlogh)')
-        plt.scatter(n,n*(math.log(len(hull))**2)/10000,color='grey',label='O(nlog^2(h))')
+        plt.scatter(n,(end-start)*50000,color='crimson',label='50000*time measured')
+        plt.scatter(n,n*10,color='limegreen',label='O(10n)')
+        plt.scatter(n,n*math.log(n),color='blue',label='O(nlogn)')
+        plt.scatter(n,n*len(hull)/2,color='orange',label='O(nh/2)')
+        plt.scatter(n,n*math.log(len(hull)),color='hotpink',label='O(nlogh)')
+        plt.scatter(n,n*(math.log(len(hull))**2),color='grey',label='O(nlog^2(h))')
     else:
-        plt.scatter(n,end-start,color='crimson')
-        plt.scatter(n,n/5000,color='limegreen')
-        plt.scatter(n,n*math.log(n)/10000,color='blue')
-        plt.scatter(n,n*len(hull)/25000,color='orange')
-        plt.scatter(n,n*math.log(len(hull))/10000,color='hotpink')
-        plt.scatter(n,n*(math.log(len(hull))**2)/10000,color='grey')
+        plt.scatter(n,(end-start)*50000,color='crimson')
+        plt.scatter(n,n*10,color='limegreen')
+        plt.scatter(n,n*math.log(n),color='blue')
+        plt.scatter(n,n*len(hull)/2,color='orange')
+        plt.scatter(n,n*math.log(len(hull)),color='hotpink')
+        plt.scatter(n,n*(math.log(len(hull))**2),color='grey')
     
 plt.legend()
     
