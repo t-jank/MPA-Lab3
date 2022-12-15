@@ -141,6 +141,7 @@ def max_angle(points,p1,p2):
     by using binary search
     '''
     n=len(points)
+    if n==1: return points[0]
     def susq(idx):
         if idx==n-1: idxnext=0
         else: idxnext=idx+1
@@ -224,13 +225,13 @@ def Chan_good(points):
 
 
 
-n = 15 ###!!!!!!!!!!!!!!!! n=13 doesn't work, to fix !!!! #######
+n = 10
 plane = 'c' # square or circle
 algorithm = 'c' # jarvis, graham_my, graham_fast, chan
 time_measurement = True
 draw = False
 
-for n in range(10,10000,50):
+for n in range(10,500,10):
     Points=[]
     if plane=='s' or plane=='square':
         for i in range(0,n):
@@ -246,14 +247,14 @@ for n in range(10,10000,50):
             if distance_from_centre <= ray:
                 Points.append([x,y])
     else: sys.exit("Plane undefined")
-    '''
+    
     if draw==True:
         for i in range(0,len(Points)):
             plt.scatter(Points[i][0],Points[i][1],color='k')
         plt.axis('square')
         plt.xlim([0,n])
         plt.ylim(0,n)
-      '''  
+      
     start=time.time()
     if algorithm=='jarvis' or algorithm=='j':
         hull=Jarvis_march(Points)
@@ -273,11 +274,11 @@ for n in range(10,10000,50):
     '''
     if n==10:
         plt.scatter(n,(end-start)*50000,color='crimson',label='50000*time measured')
-        plt.scatter(n,n*10,color='limegreen',label='O(10n)')
-        plt.scatter(n,n*math.log(n),color='blue',label='O(nlogn)')
-        plt.scatter(n,n*len(hull)/2,color='orange',label='O(nh/2)')
-        plt.scatter(n,n*math.log(len(hull)),color='hotpink',label='O(nlogh)')
-        plt.scatter(n,n*(math.log(len(hull))**2),color='grey',label='O(nlog^2(h))')
+        plt.scatter(n,n*10,color='limegreen',label='y=10n')
+        plt.scatter(n,n*math.log(n),color='blue',label='y=nlogn')
+        plt.scatter(n,n*len(hull)/2,color='orange',label='y=nh/2')
+        plt.scatter(n,n*math.log(len(hull)),color='hotpink',label='y=nlogh')
+        plt.scatter(n,n*(math.log(len(hull))**2),color='grey',label='y=nlog^2(h)')
     else:
         plt.scatter(n,(end-start)*50000,color='crimson')
         plt.scatter(n,n*10,color='limegreen')
@@ -285,6 +286,9 @@ for n in range(10,10000,50):
         plt.scatter(n,n*len(hull)/2,color='orange')
         plt.scatter(n,n*math.log(len(hull)),color='hotpink')
         plt.scatter(n,n*(math.log(len(hull))**2),color='grey')
-    
+plt.xlim(left=0)
+plt.ylim(bottom=0)        
+plt.xlabel('n')
+plt.ylabel('time')
 plt.legend()
-    
+
