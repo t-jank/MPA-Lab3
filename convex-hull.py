@@ -231,7 +231,7 @@ algorithm = 'c' # jarvis, graham_my, graham_fast, chan
 time_measurement = True
 draw = False
 
-for n in range(10,500,10):
+for n in range(10,1000,50):
     Points=[]
     if plane=='s' or plane=='square':
         for i in range(0,n):
@@ -273,12 +273,12 @@ for n in range(10,500,10):
         draw_hull(hull)
     '''
     if n==10:
-        plt.scatter(n,(end-start)*50000,color='crimson',label='50000*time measured')
+        plt.scatter(n,(end-start)*50000,color='crimson',label='y=50000*time measured')
+        plt.scatter(n,n*len(hull)/2,color='orange',label='y=nh/2')
+        plt.scatter(n,n*(math.log(len(hull))**2),color='grey',label='y=nlog^2(h)')
         plt.scatter(n,n*10,color='limegreen',label='y=10n')
         plt.scatter(n,n*math.log(n),color='blue',label='y=nlogn')
-        plt.scatter(n,n*len(hull)/2,color='orange',label='y=nh/2')
         plt.scatter(n,n*math.log(len(hull)),color='hotpink',label='y=nlogh')
-        plt.scatter(n,n*(math.log(len(hull))**2),color='grey',label='y=nlog^2(h)')
     else:
         plt.scatter(n,(end-start)*50000,color='crimson')
         plt.scatter(n,n*10,color='limegreen')
