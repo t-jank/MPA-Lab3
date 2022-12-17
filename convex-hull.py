@@ -10,6 +10,7 @@ import math
 import time
 import sys
 
+
 def length(A,B):
     return math.sqrt( (A[0]-B[0])**2 + (A[1]-B[1])**2 )
 
@@ -225,53 +226,70 @@ def Chan_good(points):
 
 
 
-n = 10
 plane = 'c' # square or circle
 algorithm = 'c' # jarvis, graham_my, graham_fast, chan
-time_measurement = True
+time_measurement = False
 draw = False
+nMin = 10
+nMax = 1000
+nStep = 50
+nRepeats = 10
 
-for n in range(10,1000,50):
-    Points=[]
-    if plane=='s' or plane=='square':
-        for i in range(0,n):
-            x = random.random()*n
-            y = random.random()*n
-            Points.append([x,y])
-    elif plane=='c' or plane=='circle':
-        while(len(Points) < n):
-            x = random.random()*n
-            y = random.random()*n
-            ray = n/2
-            distance_from_centre = math.sqrt( (n/2-x)**2 + (n/2-y)**2 )
-            if distance_from_centre <= ray:
+for n in range(nMin,nMax,nStep):
+    cntinrep=0
+    for rep in range(0,nRepeats):
+        Points=[]
+        if plane=='s' or plane=='square':
+            for i in range(0,n):
+                x = random.random()*n
+                y = random.random()*n
                 Points.append([x,y])
-    else: sys.exit("Plane undefined")
-    
-    if draw==True:
-        for i in range(0,len(Points)):
-            plt.scatter(Points[i][0],Points[i][1],color='k')
-        plt.axis('square')
-        plt.xlim([0,n])
-        plt.ylim(0,n)
-      
-    start=time.time()
-    if algorithm=='jarvis' or algorithm=='j':
-        hull=Jarvis_march(Points)
-    elif algorithm=='graham_my' or algorithm=='g1' or algorithm=='g' or algorithm=='gm':
-        hull=Graham_scan(Points)
-    elif algorithm=='graham_fast' or algorithm=='g2' or algorithm=='gf':
-        hull=convex_hull_graham(Points)
-    elif algorithm=='c' or algorithm=='chan':
-        hull=Chan_good(Points)   
-    else: sys.exit("Algorithm undefined")
-    end=time.time()
+        elif plane=='c' or plane=='circle':
+            while(len(Points) < n):
+                x = random.random()*n
+                y = random.random()*n
+                ray = n/2
+                distance_from_centre = math.sqrt( (n/2-x)**2 + (n/2-y)**2 )
+                if distance_from_centre <= ray:
+                    Points.append([x,y])
+        else: sys.exit("Plane undefined")
+        '''
+        if draw==True:
+            for i in range(0,len(Points)):
+                plt.scatter(Points[i][0],Points[i][1],color='k')
+            plt.axis('square')
+            plt.xlim([0,n])
+            plt.ylim(0,n)
+          '''     
+        start=time.time()
+        if algorithm=='jarvis' or algorithm=='j':
+            hull=Jarvis_march(Points)
+        elif algorithm=='graham_my' or algorithm=='g1' or algorithm=='g' or algorithm=='gm':
+            hull=Graham_scan(Points)
+        elif algorithm=='graham_fast' or algorithm=='g2' or algorithm=='gf':
+            hull=convex_hull_graham(Points)
+        elif algorithm=='c' or algorithm=='chan':
+            hull=Chan_good(Points)   
+        else: sys.exit("Algorithm undefined")
+        end=time.time()
+        cntinrep += len(hull)
     '''
     if time_measurement==True:
         print(end-start)
     if draw==True:
         draw_hull(hull)
     '''
+    plt.scatter(n,cntinrep/nRepeats,color='b')
+    
+plt.xlim(left=0)
+plt.xlabel('n')
+plt.ylabel('|CH(A)|')
+if plane=='s': plt.title('Płaszczyzna: kwadrat')
+elif plane=='c': plt.title('Płaszczyzna: koło')
+
+
+'''
+#### badanie zlozonosci algorytmu Chana ######
     if n==10:
         plt.scatter(n,(end-start)*50000,color='crimson',label='y=50000*time measured')
         plt.scatter(n,n*len(hull)/2,color='orange',label='y=nh/2')
@@ -291,4 +309,4 @@ plt.ylim(bottom=0)
 plt.xlabel('n')
 plt.ylabel('time')
 plt.legend()
-
+'''
