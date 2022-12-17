@@ -228,14 +228,15 @@ def Chan_good(points):
 
 plane = 'c' # square or circle
 algorithm = 'c' # jarvis, graham_my, graham_fast, chan
-time_measurement = False
+time_measurement = True
 draw = False
-nMin = 10
-nMax = 1000
+nMin = 1000
+nMax = 1001
 nStep = 50
-nRepeats = 10
+nRepeats = 100
 
 for n in range(nMin,nMax,nStep):
+    time1=0
     cntinrep=0
     for rep in range(0,nRepeats):
         Points=[]
@@ -253,14 +254,14 @@ for n in range(nMin,nMax,nStep):
                 if distance_from_centre <= ray:
                     Points.append([x,y])
         else: sys.exit("Plane undefined")
-        '''
+        
         if draw==True:
             for i in range(0,len(Points)):
                 plt.scatter(Points[i][0],Points[i][1],color='k')
             plt.axis('square')
             plt.xlim([0,n])
             plt.ylim(0,n)
-          '''     
+              
         start=time.time()
         if algorithm=='jarvis' or algorithm=='j':
             hull=Jarvis_march(Points)
@@ -269,13 +270,15 @@ for n in range(nMin,nMax,nStep):
         elif algorithm=='graham_fast' or algorithm=='g2' or algorithm=='gf':
             hull=convex_hull_graham(Points)
         elif algorithm=='c' or algorithm=='chan':
-            hull=Chan_good(Points)   
+         #   hull=Chan_good(Points)
+            hull=Chan_algorithm(Points,64,64) # szybciej, super! :) ale dziwnie się zachowuje - do n im więcej tym szybciej
         else: sys.exit("Algorithm undefined")
         end=time.time()
         cntinrep += len(hull)
-    '''
+        time1 += (end-start)
     if time_measurement==True:
-        print(end-start)
+       # print(end-start)
+       print(time1)
     if draw==True:
         draw_hull(hull)
     '''
@@ -286,7 +289,7 @@ plt.xlabel('n')
 plt.ylabel('|CH(A)|')
 if plane=='s': plt.title('Płaszczyzna: kwadrat')
 elif plane=='c': plt.title('Płaszczyzna: koło')
-
+'''
 
 '''
 #### badanie zlozonosci algorytmu Chana ######
